@@ -1,0 +1,34 @@
+# Dependencies
+node_modules
+.pnp
+.pnp.js
+
+# Build output
+.next
+out
+build
+dist
+
+# Git + CI
+.git
+.github
+
+# Env / secrets — supply via env_file or your host's secret store
+.env
+.env.*
+!.env.local.example
+
+# Logs + misc
+npm-debug.log*
+README.md
+CONTRIBUTING.md
+AGENTS.md
+CLAUDE.md
+docs
+mcp-server
+
+# Editor / OS
+.DS_Store
+.idea
+.vscode
+*.swp
