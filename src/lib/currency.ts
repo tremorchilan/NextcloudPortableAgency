@@ -43,6 +43,7 @@ export const CURRENCIES: CurrencyOption[] = [
   { code: "SGD", label: "Singapore Dollar", symbol: "S$" },
   { code: "MXN", label: "Mexican Peso", symbol: "$" },
   { code: "COP", label: "Colombian Peso", symbol: "$" },
+  { code: "BDT", label: "Bangladeshi Taka", symbol: "৳" },
 ];
 
 /**
@@ -104,4 +105,28 @@ export function formatCompactNumber(value: number): string {
   if (v >= 1_000_000) return `${(v / 1_000_000).toFixed(1)}M`;
   if (v >= 1_000) return `${(v / 1_000).toFixed(1)}k`;
   return v.toFixed(0);
+}
+
+/**
+ * Bengali (Bangla) numerals — used by Bangladeshi-business UIs that want
+ * amounts/labels rendered in ০-৯ rather than 0-9. Pure, side-effect free.
+ *
+ *   toBengaliDigits(3200)  // "৩২০০"
+ *   toBengaliDigits("৳1,250") // "৳১,২৫০"
+ */
+const BENGALI_DIGITS: Record<string, string> = {
+  "0": "০",
+  "1": "১",
+  "2": "২",
+  "3": "৩",
+  "4": "৪",
+  "5": "৫",
+  "6": "৬",
+  "7": "৭",
+  "8": "৮",
+  "9": "৯",
+};
+
+export function toBengaliDigits(value: number | string): string {
+  return String(value).replace(/[0-9]/g, (d) => BENGALI_DIGITS[d] ?? d);
 }

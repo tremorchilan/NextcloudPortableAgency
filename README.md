@@ -125,6 +125,31 @@ Set these in your host's env panel (or in `.env.local` for local dev). They
 are read at build/render time — no rebuild needed beyond a restart for
 server-rendered values.
 
+## Bangladesh business features (BizBot)
+
+This fork adds **Bangladeshi SME-friendly** capabilities on top of the
+upstream CRM template, per the BizBot whitepaper/PRD in
+[Documentation](#documentation). They're built to sit on the existing
+template without forking its data model:
+
+- **Bengali (বাংলা) locale** — `messages/bn.json` ships a Bengali UI.
+  Set `NEXT_PUBLIC_APP_LOCALE=bn` to render the app in Bangla. The locale
+  loader falls back to English per-key, so a partial translation still
+  renders cleanly. Extend it by adding keys to `messages/bn.json` (see
+  `scripts/gen-bn.mjs` for the translation map).
+- **Bangladeshi Taka (BDT, ৳)** — added to the currency picker
+  (`src/lib/currency.ts`), so a Bangladeshi business selects **৳** as its
+  default currency in **Settings → Deals & currency**. `formatCurrency`
+  renders `৳1,234` via the standard `Intl.NumberFormat`.
+- **Bengali numerals** — `toBengaliDigits()` (`src/lib/currency.ts`)
+  converts `0-9` → `০-৯` for amount/labels that should read in Bangla.
+
+> **Roadmap (not yet built):** the heavier BizBot modules from the PRD —
+> inventory/stock management, order extraction from Bangla/Banglish chat,
+> accounting & VAT/TDS reports, Excel-first exports, multi-location, and
+> offline PWA mode — are planned as follow-on phases (see the PRD). They
+> require Supabase migrations + new UI and are scoped separately.
+
 ## Architecture
 
 - **Next.js 16** (App Router, server actions, ISR) + React 19 + Tailwind 4.
