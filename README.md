@@ -142,8 +142,8 @@ inventory for Bangladeshi SMEs), kept alongside this CRM template:
 
 - [Whitepaper](./docs/bizbot-whitepaper.md) — market, architecture, business
   model, risks, and roadmap (v1.4).
-- [Product Requirements Document (PRD)](./docs/bizbot-prd.md) — _content
-  pending; will be populated from `BizBot_PRD_v1_4-1.md`._
+- [Product Requirements Document (PRD)](./docs/bizbot-prd.md) — full
+  functional/technical spec: modules, schema, API, AI/ML, security (v1.4).
 
 ## License
 
