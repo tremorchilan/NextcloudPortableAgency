@@ -169,6 +169,9 @@ inventory for Bangladeshi SMEs), kept alongside this CRM template:
   model, risks, and roadmap (v1.4).
 - [Product Requirements Document (PRD)](./docs/bizbot-prd.md) — full
   functional/technical spec: modules, schema, API, AI/ML, security (v1.4).
+- [BizBot Architecture & Build Plan](./docs/bizbot-architecture.md) — how
+  BizBot features map onto the CRM's existing tables (no contradictions)
+  and the phased build cascade.
 
 ## License
 

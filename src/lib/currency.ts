@@ -130,3 +130,44 @@ const BENGALI_DIGITS: Record<string, string> = {
 export function toBengaliDigits(value: number | string): string {
   return String(value).replace(/[0-9]/g, (d) => BENGALI_DIGITS[d] ?? d);
 }
+
+/**
+ * Group a number and render its digits in Bengali (০-৯).
+ *
+ *   formatNumberBengali(1250)  // "১,২৫০"
+ */
+export function formatNumberBengali(value: number): string {
+  const grouped = new Intl.NumberFormat(undefined, {
+    maximumFractionDigits: 0,
+  }).format(Number(value) || 0);
+  return toBengaliDigits(grouped);
+}
+
+/**
+ * Format a value as currency, then render the digits in Bengali (০-৯).
+ * Keeps the currency symbol from `Intl.NumberFormat` (e.g. "৳") and
+ * only swaps the Latin digits for Bangla ones.
+ *
+ *   formatCurrencyBengali(1250, "BDT")  // "৳১,২৫০"
+ */
+export function formatCurrencyBengali(
+  value: number,
+  currency: string = DEFAULT_CURRENCY,
+): string {
+  return toBengaliDigits(formatCurrency(value, currency));
+}
+
+/**
+ * Bangladesh-specific defaults for Bangladeshi-business deployments.
+ * Used as sensible presets (default currency, VAT rate, timezone) and
+ * referenced by the Bengali-locale UI. Single currency per account —
+ * there is intentionally no FX conversion (see migration 021).
+ */
+export const BANGLADESH = {
+  locale: "bn",
+  currency: "BDT",
+  timezone: "Asia/Dhaka",
+  /** Standard VAT rate used as a default in tax settings. */
+  defaultVatRate: 0.15,
+  dateFormat: "DD/MM/YYYY",
+} as const;

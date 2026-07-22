@@ -1,17 +1,16 @@
 // One-off generator: messages/bn.json = copy of en.json with a curated
-// set of high-visibility strings translated to Bengali. Untranslated keys
-// remain in English, so the app renders cleanly in `bn` mode (the i18n
-// loader falls back per-key only if the file were missing — here it's
-// complete, just partially translated).
+// set of strings translated to Bengali. Untranslated keys remain in
+// English. SAFETY: any source string containing "{" (ICU placeholders
+// like {count}, {name}) is NEVER overwritten, so plural/Interpolation
+// messages are preserved verbatim. Run after editing the map:
+//   node scripts/gen-bn.mjs
 import { readFileSync, writeFileSync } from "node:fs";
 
 const en = JSON.parse(readFileSync("messages/en.json", "utf8"));
 const bn = structuredClone(en);
 
-// key path -> Bengali string. Only exact, placeholder-free strings are
-// translated to avoid breaking ICU ({count}, {name}, ...) placeholders.
 const map = {
-  // Sidebar
+  // ---- Sidebar / Header ----
   "Sidebar.title": "বিজবট CRM",
   "Sidebar.dashboard": "ড্যাশবোর্ড",
   "Sidebar.inbox": "ইনবক্স",
@@ -33,7 +32,6 @@ const map = {
   "Sidebar.menuProfile": "প্রোফাইল",
   "Sidebar.menuSettings": "সেটিংস",
   "Sidebar.menuSignOut": "সাইন আউট",
-  // Header
   "Header.dashboard": "ড্যাশবোর্ড",
   "Header.inbox": "ইনবক্স",
   "Header.notifications": "নোটিফিকেশন",
@@ -49,7 +47,8 @@ const map = {
   "Header.menuProfile": "প্রোফাইল",
   "Header.menuSettings": "সেটিংস",
   "Header.menuSignOut": "সাইন আউট",
-  // Login
+  "ModeToggle.switchMode": "মোড পরিবর্তন করুন",
+  // ---- Login ----
   "LoginPage.titleAccept": "গ্রহণ করতে সাইন ইন করুন",
   "LoginPage.titleWelcome": "স্বাগতম",
   "LoginPage.descAccept": "সাইন ইন করুন, আমরা আপনাকে ইনভিটেশনে নিয়ে যাব।",
@@ -62,9 +61,7 @@ const map = {
   "LoginPage.signIn": "সাইন ইন",
   "LoginPage.noAccount": "অ্যাকাউন্ট নেই?",
   "LoginPage.createAccount": "অ্যাকাউন্ট তৈরি করুন",
-  // ModeToggle
-  "ModeToggle.switchMode": "মোড পরিবর্তন করুন",
-  // Dashboard
+  // ---- Dashboard ----
   "Dashboard.page.title": "ড্যাশবোর্ড",
   "Dashboard.page.description": "আপনার ব্যবসার সংক্ষিপ্ত চিত্র",
   "Dashboard.page.activeConversations": "সক্রিয় কথোপকথন",
@@ -79,76 +76,209 @@ const map = {
   "Dashboard.activityFeed.title": "অ্যাক্টিভিটি ফিড",
   "Dashboard.pipelineDonut.title": "পাইপলাইন",
   "Dashboard.conversationsChart.title": "কথোপকথন",
-  // Settings (message-based)
+  // ---- Settings (message-based) ----
   "Settings.pageTitle": "সেটিংস",
   "Settings.pageDesc": "অ্যাকাউন্ট ও ওয়ার্কস্পেস সেটিংস",
   "Settings.overview.viewTeamMembers": "টিম মেম্বার দেখুন",
+  "Settings.overview.appearance": "অ্যাপিয়ারেন্স",
+  "Settings.overview.yourAccount": "আপনার অ্যাকাউন্ট",
+  "Settings.overview.loading": "লোড হচ্ছে",
   "Settings.members.title": "টিম মেম্বার",
+  "Settings.members.description": "আপনার টিম মেম্বার ম্যানেজ করুন",
   "Settings.members.inviteMember": "মেম্বার ইনভাইট করুন",
   "Settings.members.online": "অনলাইন",
   "Settings.members.away": "অনুপস্থিত",
   "Settings.members.offline": "অফলাইন",
-  // Contacts
+  "Settings.members.you": "আপনি",
+  "Settings.members.unnamed": "নামবিহীন",
+  "Settings.members.remove": "সরান",
+  "Settings.members.revoke": "বাতিল করুন",
+  // ---- Contacts ----
   "Contacts.page.title": "কন্টাক্টস",
   "Contacts.page.subtitle": "আপনার কন্টাক্টস ও তাদের তথ্য",
+  "Contacts.page.customFieldsBtn": "কাস্টম ফিল্ড",
+  "Contacts.page.importBtn": "ইম্পোর্ট",
   "Contacts.page.addContactBtn": "কন্টাক্ট যোগ করুন",
   "Contacts.page.searchPlaceholder": "সার্চ করুন",
+  "Contacts.page.filterByTags": "ট্যাগ দ্বারা ফিল্টার",
+  "Contacts.page.clearAll": "সব ক্লিয়ার",
+  "Contacts.page.noTagsYet": "কোনো ট্যাগ নেই",
+  "Contacts.page.loading": "লোড হচ্ছে",
+  "Contacts.page.noContactsMatch": "কোনো কন্টাক্ট মেলেনি",
   "Contacts.page.noContactsYet": "কোনো কন্টাক্ট নেই",
+  "Contacts.page.addFirstContact": "প্রথম কন্টাক্ট যোগ করুন",
+  "Contacts.page.unnamed": "নামবিহীন",
   "Contacts.page.editAction": "এডিট",
   "Contacts.page.deleteAction": "ডিলিট",
-  "Contacts.page.addFirstContact": "প্রথম কন্টাক্ট যোগ করুন",
-  // Pipelines
+  "Contacts.page.tableColumns.name": "নাম",
+  "Contacts.page.tableColumns.phone": "ফোন",
+  "Contacts.page.tableColumns.email": "ইমেইল",
+  "Contacts.page.tableColumns.company": "কোম্পানি",
+  "Contacts.page.tableColumns.tags": "ট্যাগ",
+  "Contacts.page.tableColumns.createdAt": "তৈরির তারিখ",
+  "Contacts.page.deleteBtn": "ডিলিট",
+  "Contacts.page.cancel": "বাতিল",
+  "Contacts.page.toastDeleted": "ডিলিট করা হয়েছে",
+  "Contacts.page.toastFailedDelete": "ডিলিট ব্যর্থ",
+  "Contacts.form.addTitle": "নতুন কন্টাক্ট",
+  "Contacts.form.editTitle": "কন্টাক্ট এডিট করুন",
+  // ---- Pipelines / Deals (BizBot "orders") ----
   "Pipelines.page.selectPipeline": "পাইপলাইন নির্বাচন করুন",
+  "Pipelines.page.noPipelinesYet": "কোনো পাইপলাইন নেই",
+  "Pipelines.page.managePipelines": "পাইপলাইন ম্যানেজ",
   "Pipelines.page.addPipeline": "পাইপলাইন যোগ করুন",
   "Pipelines.page.addDeal": "ডিল যোগ করুন",
+  "Pipelines.page.createToStartTracking": "ট্র্যাকিং শুরু করতে তৈরি করুন",
   "Pipelines.page.createPipeline": "পাইপলাইন তৈরি করুন",
   "Pipelines.page.newPipeline": "নতুন পাইপলাইন",
   "Pipelines.page.pipelineName": "পাইপলাইনের নাম",
+  "Pipelines.page.defaultStagesDesc": "ডিফল্ট স্টেজসমূহ",
+  "Pipelines.page.cancel": "বাতিল",
+  "Pipelines.page.creating": "তৈরি হচ্ছে",
+  "Pipelines.page.createPipelineBtn": "পাইপলাইন তৈরি করুন",
+  "Pipelines.page.toastPipelineCreated": "পাইপলাইন তৈরি হয়েছে",
+  "Pipelines.page.toastNotLinkedToAccount": "অ্যাকাউন্টের সাথে লিংক করা নেই",
+  "Pipelines.board.dropDealHere": "এখানে ডিল ড্রপ করুন",
+  "Pipelines.board.addDeal": "ডিল যোগ করুন",
+  "Pipelines.card.noContact": "কোনো কন্টাক্ট নেই",
   "Pipelines.card.won": "জিতেছে",
   "Pipelines.card.lost": "হেরেছে",
-  "Pipelines.form.newDeal": "নতুন ডিল",
   "Pipelines.form.editDeal": "ডিল এডিট করুন",
+  "Pipelines.form.newDeal": "নতুন ডিল",
   "Pipelines.form.title": "শিরোনাম",
   "Pipelines.form.contact": "কন্টাক্ট",
+  "Pipelines.form.selectContact": "কন্টাক্ট নির্বাচন করুন",
+  "Pipelines.form.linkToConversation": "কথোপকথনের সাথে লিংক",
   "Pipelines.form.value": "মূল্য",
   "Pipelines.form.currency": "কারেন্সি",
+  "Pipelines.form.expectedCloseDate": "এক্সপেক্টেড ক্লোজ তারিখ",
+  "Pipelines.form.stage": "স্টেজ",
+  "Pipelines.form.assignedTo": "অ্যাসাইন করা",
+  "Pipelines.form.unassigned": "অ্যাসাইন করা হয়নি",
   "Pipelines.form.notes": "নোট",
-  // Broadcasts
+  "Pipelines.form.notesPlaceholder": "নোট লিখুন",
+  "Pipelines.form.status": "স্ট্যাটাস",
+  // ---- Broadcasts ----
   "Broadcasts.page.title": "ব্রডকাস্ট",
   "Broadcasts.page.subtitle": "টেমপ্লেট ব্যবহার করে ক্লায়েন্টদের বাল্ক মেসেজ পাঠান",
   "Broadcasts.page.newBroadcast": "নতুন ব্রডকাস্ট",
+  "Broadcasts.page.noBroadcastsYet": "কোনো ব্রডকাস্ট নেই",
+  "Broadcasts.page.createFirst": "প্রথম ব্রডকাস্ট তৈরি করুন",
+  "Broadcasts.page.table.name": "নাম",
+  "Broadcasts.page.table.template": "টেমপ্লেট",
+  "Broadcasts.page.table.recipients": "প্রাপক",
+  "Broadcasts.page.table.delivery": "ডেলিভারি",
+  "Broadcasts.page.table.read": "পঠিত",
+  "Broadcasts.page.table.status": "স্ট্যাটাস",
+  "Broadcasts.page.table.date": "তারিখ",
+  "Broadcasts.page.errorLoad": "লোড ব্যর্থ",
+  "Broadcasts.page.retry": "আবার চেষ্টা",
   "Broadcasts.status.draft": "ড্রাফট",
   "Broadcasts.status.scheduled": "শিডিউল",
   "Broadcasts.status.sending": "পাঠানো হচ্ছে",
   "Broadcasts.status.sent": "পাঠানো হয়েছে",
   "Broadcasts.status.failed": "ব্যর্থ",
+  "Broadcasts.status.pending": "পেন্ডিং",
   "Broadcasts.status.delivered": "ডেলিভার্ড",
   "Broadcasts.status.read": "পঠিত",
+  "Broadcasts.status.unknown": "অজানা",
+  "Broadcasts.detail.backToBroadcasts": "ব্রডকাস্টে ফিরে যান",
+  "Broadcasts.detail.notFound": "পাওয়া যায়নি",
+  "Broadcasts.detail.template": "টেমপ্লেট",
+  "Broadcasts.detail.createdAt": "তৈরির তারিখ",
+  "Broadcasts.detail.deletePrompt": "আপনি কি ডিলিট করতে চান?",
+  "Broadcasts.detail.cancel": "বাতিল",
+  "Broadcasts.detail.confirm": "নিশ্চিত",
+  "Broadcasts.detail.deleting": "ডিলিট হচ্ছে",
+  "Broadcasts.detail.delete": "ডিলিট",
+  "Broadcasts.detail.cannotDeleteSending": "পাঠানোর সময় ডিলিট করা যাবে না",
+  "Broadcasts.detail.funnel": "ফানেল",
+  "Broadcasts.detail.recipientsHeader": "প্রাপক",
+  "Broadcasts.detail.recipientsHeaderAll": "সব প্রাপক",
+  "Broadcasts.detail.allStatuses": "সব স্ট্যাটাস",
   "Broadcasts.detail.exportCsv": "CSV এক্সপোর্ট",
-  // Automations
+  // ---- Automations ----
   "Automations.list.title": "অটোমেশন",
   "Automations.list.subtitle": "ইনবাউন্ড মেসেজ, নতুন কন্টাক্ট বা শিডিউলে ট্রিগার",
   "Automations.list.create": "তৈরি করুন",
   "Automations.list.templatesTitle": "টেমপ্লেট",
   "Automations.list.emptyTitle": "কোনো অটোমেশন নেই",
+  "Automations.list.emptyDesc": "প্রথম অটোমেশন তৈরি করুন",
   "Automations.list.activate": "অ্যাকটিভেট",
   "Automations.list.deactivate": "ডি-অ্যাকটিভেট",
   "Automations.list.edit": "এডিট",
   "Automations.list.duplicate": "ডুপ্লিকেট",
-  "Automations.list.delete": "ডিলিট",
   "Automations.list.viewLogs": "লগ দেখুন",
-  // Flows
+  "Automations.list.delete": "ডিলিট",
+  "Automations.list.cancel": "বাতিল",
+  "Automations.list.deleteTitle": "ডিলিট",
+  "Automations.list.deleteDesc": "আপনি কি নিশ্চিত?",
+  "Automations.list.toasts.activated": "অ্যাকটিভ করা হয়েছে",
+  "Automations.list.toasts.paused": "পজ করা হয়েছে",
+  "Automations.list.toasts.duplicated": "ডুপ্লিকেট করা হয়েছে",
+  "Automations.list.toasts.deleted": "ডিলিট করা হয়েছে",
+  "Automations.list.toasts.updateError": "আপডেট এরর",
+  "Automations.list.toasts.duplicateError": "ডুপ্লিকেট এরর",
+  "Automations.list.toasts.deleteError": "ডিলিট এরর",
+  "Automations.edit.loading": "লোড হচ্ছে",
+  "Automations.edit.loadError": "লোড এরর",
+  "Automations.edit.back": "ফিরে যান",
+  "Automations.logs.title": "লগ",
+  "Automations.logs.loadError": "লোড এরর",
+  "Automations.logs.emptyTitle": "কোনো লগ নেই",
+  "Automations.logs.emptyDesc": "এই অটোমেশনের কোনো রান নেই",
+  "Automations.logs.unknownContact": "অজানা কন্টাক্ট",
+  "Automations.logs.step": "স্টেপ",
+  "Automations.logs.noSteps": "কোনো স্টেপ নেই",
+  "Automations.logs.status.success": "সাকসেস",
+  "Automations.logs.status.partial": "পার্শিয়াল",
+  "Automations.logs.status.failed": "ব্যর্থ",
+  // ---- Flows ----
   "Flows.list.title": "ফ্লো",
+  "Flows.list.beta": "বিটা",
   "Flows.list.description": "ভিজুয়াল বিল্ডার দিয়ে ওয়ার্কফ্লো তৈরি করুন",
   "Flows.list.newFlow": "নতুন ফ্লো",
   "Flows.list.statusDraft": "ড্রাফট",
   "Flows.list.statusActive": "অ্যাকটিভ",
   "Flows.list.statusArchived": "আর্কাইভ",
+  "Flows.list.loadError": "লোড এরর",
+  "Flows.list.createError": "তৈরি এরর",
+  "Flows.list.cloneError": "ক্লোন এরর",
+  "Flows.list.deleteConfirm": "আপনি কি নিশ্চিত?",
+  "Flows.list.deleteSuccess": "ডিলিট সাকসেস",
+  "Flows.list.deleteError": "ডিলিট এরর",
+  "Flows.list.emptyTitle": "কোনো ফ্লো নেই",
+  "Flows.list.emptyDesc": "প্রথম ফ্লো তৈরি করুন",
+  "Flows.list.createFirst": "প্রথম ফ্লো তৈরি করুন",
+  "Flows.list.createTitle": "ফ্লো তৈরি করুন",
+  "Flows.list.createDesc": "ফ্লোয়ের নাম দিন",
+  "Flows.list.startTemplate": "টেমপ্লেট দিয়ে শুরু করুন",
+  "Flows.list.nodeCount": "নোড",
+  "Flows.list.startBlank": "খালি দিয়ে শুরু করুন",
+  "Flows.list.placeholderName": "ফ্লোর নাম",
+  "Flows.list.cancel": "বাতিল",
+  "Flows.list.createBlank": "খালি ফ্লো তৈরি করুন",
+  "Flows.list.runCount": "রান",
   "Flows.list.edit": "এডিট",
   "Flows.list.delete": "ডিলিট",
+  "Flows.list.triggerKeywordNone": "কিছু না",
+  "Flows.list.triggerKeyword": "কিওয়ার্ড",
+  "Flows.list.triggerFirstInbound": "প্রথম ইনবাউন্ড",
+  "Flows.list.triggerManual": "ম্যানুয়াল",
+  "Flows.edit.notFound": "পাওয়া যায়নি",
+  "Flows.edit.backToFlows": "ফ্লোতে ফিরে যান",
+  "Flows.edit.loadError": "লোড এরর",
+  "Flows.logs.title": "ফ্লো লগ",
+  "Flows.logs.description": "এই ফ্লোয়ের রান হিস্ট্রি",
+  "Flows.logs.emptyState": "কোনো লগ নেই",
+  "Flows.logs.loadError": "লোড এরর",
+  "Flows.logs.unknownContact": "অজানা কন্টাক্ট",
+  "Flows.logs.atNode": "নোডে",
 };
 
 let applied = 0;
+let skippedPlaceholder = 0;
+let skippedMissing = 0;
 for (const [key, value] of Object.entries(map)) {
   const parts = key.split(".");
   let node = bn;
@@ -161,13 +291,21 @@ for (const [key, value] of Object.entries(map)) {
       break;
     }
   }
-  if (ok && node[parts[parts.length - 1]] !== undefined) {
-    node[parts[parts.length - 1]] = value;
-    applied++;
-  } else {
-    console.warn("SKIP (key not found):", key);
+  const leaf = parts[parts.length - 1];
+  if (!ok || node[leaf] === undefined) {
+    skippedMissing++;
+    continue;
   }
+  // SAFETY: never overwrite a string that carries ICU placeholders.
+  if (typeof node[leaf] === "string" && node[leaf].includes("{")) {
+    skippedPlaceholder++;
+    continue;
+  }
+  node[leaf] = value;
+  applied++;
 }
 
 writeFileSync("messages/bn.json", JSON.stringify(bn, null, 2) + "\n");
-console.log(`Applied ${applied}/${Object.keys(map).length} Bengali translations -> messages/bn.json`);
+console.log(
+  `Applied ${applied} Bengali translations (skipped ${skippedPlaceholder} placeholder strings, ${skippedMissing} missing keys) -> messages/bn.json`,
+);
