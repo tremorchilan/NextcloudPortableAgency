@@ -2,15 +2,17 @@
 
 **Sovereign Folder-Centric Orchestration Architecture** — v2.2 (implemented)
 
+📄 **Key documents**
+- **[Whitepaper (v2.2)](docs/WHITEPAPER.md)** — the reconciled architecture: what the system does, where everything lives, the two phases, context persistence, security, and the build plan.
+- **[Product Requirements Document (PRD)](docs/PRD.md)** — goals, personas, user journeys, functional & non-functional requirements, milestones with acceptance criteria, and success metrics.
+- [Architecture](docs/ARCHITECTURE.md) · [Setup & development](docs/SETUP.md) · [Changelog & deviations](docs/CHANGELOG.md)
+
 Empire Engine turns any folder on your computer into a complete digital
 environment — a business, a homelab, a dev stack — that lives inside Docker
 and is shaped by AI agents. Create a folder named `shop-alpha` and it becomes
 a sovereign unit containing running services, source code, design assets, and
 automation workflows. Zip it, send it to someone else, and they run
 `docker compose up` to inherit everything exactly as you left it.
-
-The full reconciled whitepaper (v2.2) lives at [`docs/WHITEPAPER.md`](docs/WHITEPAPER.md).
-This repository is its implementation.
 
 ## The three pieces
 

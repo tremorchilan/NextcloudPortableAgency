@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.1.1 — 2026-08-13 — PRD published
+
+- Added `docs/PRD.md` — product requirements document (goals, personas, user
+  journeys, functional/non-functional requirements, milestones with
+  acceptance criteria, success metrics, risk owners, traceability to the
+  whitepaper).
+- README now links the **Whitepaper** and **PRD** in a "Key documents" block.
+
 ## 0.1.0 — 2026-08-13 — initial implementation of the v2.2 whitepaper
 
 The previous `NextcloudPortableAgency` repository contents were removed and
