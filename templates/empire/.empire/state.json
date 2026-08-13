@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "lastAgent": null,
+  "agents": [],
+  "services": [
+    { "name": "dockge", "status": "unknown" },
+    { "name": "onecli", "status": "unknown" }
+  ],
+  "stackStatus": "unknown",
+  "updatedAt": "{{EMPIRE_CREATED_AT}}"
+}

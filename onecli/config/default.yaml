@@ -1,0 +1,35 @@
+# OneCLI default configuration.
+# Inside an Empire, `services/onecli/policy.yaml` is mounted over this file.
+#
+#   server: how OneCLI itself runs
+#   policy: which service may resolve which placeholder (default: deny)
+#   alert:  audit thresholds that raise alerts
+server:
+  host: 0.0.0.0
+  port: 8080
+  data_dir: ./data
+  vault_file: vault.enc
+  audit_file: audit.jsonl
+  max_body_swap_bytes: 1048576
+  request_timeout_ms: 60000
+
+policy:
+  default: deny
+  services:
+    hermes:
+      allowed_placeholders: [HERMES_API_KEY, OPENAI_API_KEY]
+      token: null
+    openfang:
+      allowed_placeholders: [OPENFANG_API_KEY, OPENAI_API_KEY]
+      token: null
+    n8n:
+      allowed_placeholders: [MAILGUN_API_KEY, ERP_API_KEY]
+      token: null
+    espocrm:
+      allowed_placeholders: []
+    erpnext:
+      allowed_placeholders: []
+
+alert:
+  max_denials_per_minute: 10
+  max_failed_key_lookups_per_minute: 20

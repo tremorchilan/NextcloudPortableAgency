@@ -1,0 +1,14 @@
+{
+  "files.exclude": {
+    "worktrees": true,
+    "data": false,
+    "logs": true
+  },
+  "search.exclude": {
+    "worktrees": true,
+    "data": true,
+    "**/generated/tokens.css": false
+  },
+  "git.ignoredRepositories": [],
+  "editor.formatOnSave": true
+}

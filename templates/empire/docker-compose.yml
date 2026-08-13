@@ -1,0 +1,99 @@
+# {{EMPIRE_NAME}} — Empire stack
+#
+# Phase separation (see docs/WHITEPAPER.md §3):
+#   SETUP phase  → use Dockge (this stack) to browse and install apps.
+#   SESSION phase → agents edit this file directly. Dockge becomes read-only.
+#
+# Every service shares the private network of this compose project and is
+# isolated from other Empires and from the host.
+
+name: {{EMPIRE_ID}}
+
+services:
+  dockge:
+    image: louislam/dockge:1
+    container_name: {{EMPIRE_ID}}-dockge
+    restart: unless-stopped
+    ports:
+      - "${EMPIRE_DOCKGE_PORT:-5001}:5001"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./data/dockge:/app/data
+      # Stacks Dockge manages live inside the Empire folder so they stay sovereign.
+      - ./dockge-stacks:/opt/stacks
+    environment:
+      - DOCKGE_STACKS_DIR=/opt/stacks
+
+  onecli:
+    # Secret guardian: swaps PLACEHOLDER_* keys for real ones at runtime.
+    image: ghcr.io/empire-engine/onecli:0.1.0
+    # To build locally instead: comment the image line, uncomment build, and
+    # point it at a checkout of the onecli workspace (services/onecli/).
+    # build:
+    #   context: ./services/onecli
+    container_name: {{EMPIRE_ID}}-onecli
+    restart: unless-stopped
+    ports:
+      - "${EMPIRE_ONECLI_PORT:-58080}:8080"
+    environment:
+      # Injected by Meta-Harness at container start (from the host's SecretStorage).
+      # The dev fallbacks below let the stack boot standalone; replace them for
+      # anything that matters. Neither value is ever exported with the Empire.
+      - ONECLI_MASTER_KEY=${ONECLI_MASTER_KEY:-dev-master-key-do-not-use}
+      - ONECLI_ADMIN_TOKEN=${ONECLI_ADMIN_TOKEN:-dev-admin-token-do-not-use}
+      - ONECLI_HOST=0.0.0.0
+      - ONECLI_PORT=8080
+      - ONECLI_DATA_DIR=/data
+    volumes:
+      - ./data/onecli:/data
+      - ./services/onecli/policy.yaml:/etc/onecli/policy.yaml:ro
+      - ./logs:/logs
+
+  # -------------------------------------------------------------------------
+  # Install the rest from Dockge during the setup phase. Examples:
+  #
+  # n8n:
+  #   image: n8nio/n8n:latest
+  #   container_name: {{EMPIRE_ID}}-n8n
+  #   restart: unless-stopped
+  #   environment:
+  #     # Route outbound calls through OneCLI so placeholders get swapped:
+  #     - HTTP_PROXY=http://onecli:8080
+  #     - HTTPS_PROXY=http://onecli:8080
+  #     - X_ONECLI_SERVICE=n8n
+  #     - N8N_SECURE_COOKIE=false
+  #   ports:
+  #     - "${EMPIRE_N8N_PORT:-5678}:5678"
+  #   volumes:
+  #     - ./data/n8n:/home/node/.n8n
+  #
+  # espocrm:
+  #   image: espocrm/espocrm:latest
+  #   container_name: {{EMPIRE_ID}}-espocrm
+  #   restart: unless-stopped
+  #   environment:
+  #     - ESPOCRM_DATABASE_PASSWORD=${PLACEHOLDER_ESPO_ADMIN_PASSWORD:-changeme}
+  #   ports:
+  #     - "${EMPIRE_ESPO_PORT:-8080}:80"
+  #   volumes:
+  #     - ./data/espocrm:/var/www/html
+  #
+  # erpnext:
+  #   image: frappe/erpnext:v15
+  #   container_name: {{EMPIRE_ID}}-erpnext
+  #   restart: unless-stopped
+  #   ports:
+  #     - "${EMPIRE_ERP_PORT:-8081}:8000"
+  #   volumes:
+  #     - ./data/erpnext:/home/frappe/frappe-bench/sites
+  #
+  # nginx:
+  #   image: nginx:alpine
+  #   container_name: {{EMPIRE_ID}}-nginx
+  #   restart: unless-stopped
+  #   ports:
+  #     - "${EMPIRE_NGINX_PORT:-8082}:80"
+  #   volumes:
+  #     - ./src/website:/usr/share/nginx/html:ro
+  #     - ./services/nginx:/etc/nginx/conf.d:ro
+  # -------------------------------------------------------------------------

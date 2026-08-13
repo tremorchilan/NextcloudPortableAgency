@@ -1,0 +1,17 @@
+{
+  "name": "onecli",
+  "version": "0.1.0",
+  "private": true,
+  "description": "OneCLI — the secret guardian. An HTTP proxy inside the Empire's Docker network that swaps PLACEHOLDER_* keys for real keys at runtime. AES-256-GCM encrypted vault, per-service policy, structured audit trail.",
+  "main": "dist/main.js",
+  "scripts": {
+    "build": "tsc -p .",
+    "start": "node dist/main.js",
+    "test": "tsc -p tsconfig.test.json && node --test dist-test/test/*.test.js",
+    "typecheck": "tsc -p . --noEmit"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "license": "MIT"
+}

@@ -1,0 +1,25 @@
+# Secrets — real keys never enter git (or exports).
+.env
+
+# Ephemeral agent isolation.
+worktrees/
+
+# Build output & dependencies.
+node_modules/
+out/
+dist/
+*.log
+
+# Persistent service data stays out of git but SURVIVES export.
+data/*
+!data/.gitkeep
+
+# Audit & debug logs stay out of git; included in exports only if requested.
+logs/*
+!logs/.gitkeep
+
+# Dockge-managed stacks (generated during setup; agents edit root compose).
+dockge-stacks/
+
+.DS_Store
+Thumbs.db
