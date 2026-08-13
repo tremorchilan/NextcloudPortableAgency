@@ -125,6 +125,17 @@ async function handleProxy(deps: ProxyDeps, req: http.IncomingMessage, res: http
     headers['Proxy-Authorization'] = `Basic ${Buffer.from(decodeURIComponent(target.username) + ':' + decodeURIComponent(target.password)).toString('base64')}`;
   }
 
+  // A header placeholder that could not be resolved must never be forwarded
+  // upstream as a literal placeholder — fail loudly instead. (Misses are
+  // already audited by the resolver.)
+  if (report.missed.length > 0) {
+    res.writeHead(502, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({
+      error: `OneCLI could not resolve required header placeholder(s): ${[...new Set(report.missed)].join(', ')}. Register the key with "Empire: Register Secret".`
+    }));
+    return;
+  }
+
   // --- body ------------------------------------------------------------------
   let body: Buffer | null = null;
   const contentLength = Number(req.headers['content-length'] ?? 0);

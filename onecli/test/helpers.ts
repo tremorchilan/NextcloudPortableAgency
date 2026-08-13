@@ -68,18 +68,21 @@ export async function bootServer(masterKey: string, adminToken: string): Promise
   };
 }
 
-/** Boot a fake upstream HTTP server; returns {url, lastRequest}. */
+/** Boot a fake upstream HTTP server; returns {url, lastRequest, hits}. */
 export async function bootUpstream(): Promise<{
   url: string;
   lastRequest: Promise<{ method: string; path: string; headers: Record<string, string | string[] | undefined>; body: string }>;
+  hits: number;
   close: () => Promise<void>;
 }> {
   const http = await import('node:http');
   let resolveReq!: (r: { method: string; path: string; headers: Record<string, string | string[] | undefined>; body: string }) => void;
+  let hits = 0;
   const lastRequest = new Promise<{ method: string; path: string; headers: Record<string, string | string[] | undefined>; body: string }>((resolve) => {
     resolveReq = resolve;
   });
   const server = http.createServer((req, res) => {
+    hits++;
     const chunks: Buffer[] = [];
     req.on('data', (c: Buffer) => chunks.push(c));
     req.on('end', () => {
@@ -101,6 +104,7 @@ export async function bootUpstream(): Promise<{
   return {
     url: `http://127.0.0.1:${(address as { port: number }).port}`,
     lastRequest,
+    get hits() { return hits; },
     close: () => new Promise((resolve) => {
       server.closeAllConnections?.();
       server.close(() => resolve());

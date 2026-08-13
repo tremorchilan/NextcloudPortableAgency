@@ -98,6 +98,29 @@ test('missing service header → 403 with guidance', async () => {
   }
 });
 
+test('header placeholder missing from the vault → 502, never forwarded literally', async () => {
+  const server = await bootServer(MASTER, ADMIN);
+  const upstream = await bootUpstream();
+  try {
+    const res = await proxyRequest(server.url, `${upstream.url}/x`, {
+      headers: { 'X-OneCLI-Service': 'hermes', Authorization: 'Bearer {{OPENAI_API_KEY}}' }
+    });
+    assert.equal(res.status, 502);
+    assert.match(res.body, /could not resolve/);
+    assert.match(res.body, /OPENAI_API_KEY/);
+
+    // Give any (buggy) forwarding a moment, then prove the upstream was never hit.
+    await new Promise((r) => setTimeout(r, 50));
+    assert.equal(upstream.hits, 0, 'upstream must never receive an unresolved placeholder');
+
+    const auditRaw = fs.readFileSync(server.auditFile, 'utf8');
+    assert.ok(auditRaw.includes('"event":"miss"'));
+  } finally {
+    await upstream.close();
+    await server.close();
+  }
+});
+
 test('origin-form requests are rejected with a hint to use OneCLI as proxy', async () => {
   const server = await bootServer(MASTER, ADMIN);
   try {
