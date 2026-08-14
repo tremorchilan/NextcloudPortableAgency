@@ -1,0 +1,8 @@
+{
+  "empire": "{{EMPIRE_NAME}}",
+  "id": "{{EMPIRE_ID}}",
+  "template": "empire-engine/default",
+  "createdAt": "{{EMPIRE_CREATED_AT}}",
+  "engineVersion": "{{EMPIRE_ENGINE_VERSION}}",
+  "services": ["dockge", "onecli"]
+}

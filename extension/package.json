@@ -1,0 +1,136 @@
+{
+  "name": "meta-harness",
+  "displayName": "Empire Engine — Meta-Harness",
+  "description": "The cockpit for Empire Engine: create sovereign folder-based environments, spawn AI agents with persistent shared context, manage secrets via OneCLI, and design visually with OpenDesign.",
+  "version": "0.1.0",
+  "publisher": "empire-engine",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "empire",
+    "docker",
+    "orchestration",
+    "ai-agents",
+    "self-hosted"
+  ],
+  "main": "./out/extension.js",
+  "activationEvents": [],
+  "contributes": {
+    "commands": [
+      { "command": "empire.createEmpire", "title": "Empire: Create New Empire", "category": "Empire" },
+      { "command": "empire.openEmpire", "title": "Empire: Open Existing Empire", "category": "Empire" },
+      { "command": "empire.detectEmpire", "title": "Empire: Detect Empire in Workspace", "category": "Empire" },
+      { "command": "empire.startStack", "title": "Empire: Start Stack", "category": "Empire", "icon": "$(play)" },
+      { "command": "empire.stopStack", "title": "Empire: Stop Stack", "category": "Empire", "icon": "$(debug-stop)" },
+      { "command": "empire.stackStatus", "title": "Empire: Show Stack Status", "category": "Empire" },
+      { "command": "empire.spawnAgent", "title": "Empire: Spawn Agent", "category": "Empire", "icon": "$(zap)" },
+      { "command": "empire.switchAgent", "title": "Empire: Switch Agent", "category": "Empire", "icon": "$(arrow-swap)" },
+      { "command": "empire.openDockge", "title": "Empire: Open Dockge", "category": "Empire", "icon": "$(browser)" },
+      { "command": "empire.openDesign", "title": "Empire: Open OpenDesign Panel", "category": "Empire", "icon": "$(symbol-color)" },
+      { "command": "empire.generateDesignCode", "title": "Empire: Generate Code From Design", "category": "Empire", "icon": "$(wand)" },
+      { "command": "empire.exportEmpire", "title": "Empire: Export Empire (.zip)", "category": "Empire", "icon": "$(export)" },
+      { "command": "empire.importEmpire", "title": "Empire: Import Empire (.zip)", "category": "Empire", "icon": "$(import)" },
+      { "command": "empire.registerSecret", "title": "Empire: Register Secret With OneCLI", "category": "Empire", "icon": "$(lock)" },
+      { "command": "empire.viewAuditLog", "title": "Empire: View OneCLI Audit Log", "category": "Empire" },
+      { "command": "empire.showDashboard", "title": "Empire: Show Dashboard", "category": "Empire", "icon": "$(dashboard)" },
+      { "command": "empire.refreshExplorer", "title": "Empire: Refresh", "category": "Empire", "icon": "$(refresh)" },
+      { "command": "empire.updateContext", "title": "Empire: Update Context File", "category": "Empire" },
+      { "command": "empire.compactContext", "title": "Empire: Compact Context File", "category": "Empire" }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        { "id": "empire", "title": "Empire Engine", "icon": "media/empire.svg" }
+      ],
+      "panel": [
+        { "id": "opendesign", "title": "OpenDesign", "icon": "media/opendesign.svg" }
+      ]
+    },
+    "views": {
+      "empire": [
+        { "id": "empire.explorer", "name": "Empire Explorer", "icon": "media/empire.svg" }
+      ],
+      "opendesign": [
+        { "id": "opendesign.panel", "type": "webview", "name": "OpenDesign" }
+      ]
+    },
+    "viewsWelcome": [
+      {
+        "view": "empire.explorer",
+        "contents": "No Empire open.\n[Create New Empire](command:empire.createEmpire)\n[Open Existing Empire](command:empire.openEmpire)"
+      }
+    ],
+    "menus": {
+      "commandPalette": [
+        { "command": "empire.refreshExplorer", "when": "false" }
+      ],
+      "view/title": [
+        { "command": "empire.createEmpire", "when": "view == empire.explorer", "group": "navigation@1" },
+        { "command": "empire.openEmpire", "when": "view == empire.explorer", "group": "navigation@2" },
+        { "command": "empire.spawnAgent", "when": "view == empire.explorer", "group": "primary@1" },
+        { "command": "empire.openDockge", "when": "view == empire.explorer", "group": "primary@2" },
+        { "command": "empire.exportEmpire", "when": "view == empire.explorer", "group": "secondary@1" },
+        { "command": "empire.refreshExplorer", "when": "view == empire.explorer", "group": "navigation@3" },
+        { "command": "empire.generateDesignCode", "when": "view == opendesign.panel", "group": "navigation@1" }
+      ]
+    },
+    "configuration": {
+      "title": "Empire Engine",
+      "properties": {
+        "empire.dockge.port": {
+          "type": "number",
+          "default": 5001,
+          "description": "Host port Dockge is published on inside Empires."
+        },
+        "empire.onecli.port": {
+          "type": "number",
+          "default": 58080,
+          "description": "Host port OneCLI is published on inside Empires."
+        },
+        "empire.agents.extraPaths": {
+          "type": "array",
+          "items": { "type": "string" },
+          "default": [],
+          "description": "Extra directories to scan for agent executables (claude, codex, opencode, aider)."
+        },
+        "empire.export.includeLogs": {
+          "type": "boolean",
+          "default": false,
+          "description": "Include logs/ in Empire exports."
+        },
+        "empire.export.includeData": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include data/ (persistent service volumes) in Empire exports. The OneCLI vault is always excluded."
+        },
+        "empire.export.includeGit": {
+          "type": "boolean",
+          "default": false,
+          "description": "Include .git history in Empire exports."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "build": "node esbuild.webview.mjs && tsc -p .",
+    "test": "tsc -p tsconfig.test.json && node --test \"out-test/test/**/*.test.js\"",
+    "typecheck": "tsc -p . --noEmit",
+    "vscode:prepublish": "npm run build"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@types/vscode": "~1.85.0",
+    "esbuild": "^0.21.5",
+    "typescript": "^5.4.5"
+  }
+}

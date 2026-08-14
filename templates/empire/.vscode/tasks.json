@@ -1,0 +1,48 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Empire: Start Stack",
+      "type": "shell",
+      "command": "docker compose up -d",
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "Empire: Stop Stack",
+      "type": "shell",
+      "command": "docker compose down",
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "Empire: Stack Status",
+      "type": "shell",
+      "command": "docker compose ps",
+      "problemMatcher": []
+    },
+    {
+      "label": "Empire: Open Dockge",
+      "type": "shell",
+      "command": "xdg-open http://127.0.0.1:${input:dockgePort}",
+      "linux": {
+        "command": "xdg-open http://127.0.0.1:${input:dockgePort}"
+      },
+      "osx": {
+        "command": "open http://127.0.0.1:${input:dockgePort}"
+      },
+      "windows": {
+        "command": "start http://127.0.0.1:${input:dockgePort}"
+      },
+      "problemMatcher": []
+    }
+  ],
+  "inputs": [
+    {
+      "id": "dockgePort",
+      "type": "promptString",
+      "description": "Dockge host port",
+      "default": "5001"
+    }
+  ]
+}

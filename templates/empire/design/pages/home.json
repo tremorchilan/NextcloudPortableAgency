@@ -1,0 +1,37 @@
+{
+  "id": "home",
+  "name": "Home",
+  "route": "/",
+  "nodes": [
+    {
+      "id": "nav-1",
+      "type": "navbar",
+      "props": { "title": "{{EMPIRE_NAME}}" },
+      "children": []
+    },
+    {
+      "id": "hero-1",
+      "type": "card",
+      "props": {},
+      "children": []
+    },
+    {
+      "id": "h-1",
+      "type": "heading",
+      "props": { "text": "Welcome to {{EMPIRE_NAME}}", "level": "h1", "parent": "hero-1" },
+      "children": []
+    },
+    {
+      "id": "t-1",
+      "type": "text",
+      "props": { "text": "This page was designed in OpenDesign and generated into real code in src/website/generated/.", "parent": "hero-1" },
+      "children": []
+    },
+    {
+      "id": "b-1",
+      "type": "button",
+      "props": { "text": "Get started", "variant": "primary", "parent": "hero-1" },
+      "children": []
+    }
+  ]
+}
